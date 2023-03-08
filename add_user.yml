@@ -1,0 +1,31 @@
+---
+- name: Create user and add SSH key
+  hosts: localhost
+  become: true
+  vars:
+    user_name: "{{ lookup('env', 'user_name') }}"
+    ssh_key: "{{ lookup('env', 'ssh_key') }}"
+    password: "{{ lookup('env', 'password') }}"
+  tasks:
+    - name: Create group
+      group:
+        name: "{{ user_name }}"
+      become: true
+
+    - name: Create new user
+      user:
+        name: "{{ user_name }}"
+        group: "{{ user_name }}"
+        groups: sudo
+        password: "{{ password | password_hash('sha512') }}"
+        create_home: yes
+        shell: /bin/bash
+        update_password: always
+      become: true
+
+    - name: Add SSH key to authorized_keys
+      authorized_key:
+        user: "{{ user_name }}"
+        key: "{{ ssh_key }}"
+        state: present
+      become: true
