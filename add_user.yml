@@ -18,7 +18,6 @@
         group: "{{ user_name }}"
         groups: sudo
         password: "{{ password | password_hash('sha512') }}"
-        create_home: yes
         shell: /bin/bash
         update_password: always
       become: true
