@@ -3,8 +3,7 @@
 # check if ansible install is installed
 if ! [ -x "$(command -v ansible)" ]; then
     echo "ansible is not installed"
-    sudo apt-get update -y && sudo apt-get install ansible -y
-    exit 1
+    sudo apt-get update -y && sudo apt-get install ansible -y || exit 1
 fi
 
 user_name="$1"
